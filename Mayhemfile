@@ -1,0 +1,6 @@
+project: rnshah9/mayhem-lacc
+target: lacc
+
+cmds:
+  - cmd: /lacc/bin/lacc @@
+    filepath: /test.c
