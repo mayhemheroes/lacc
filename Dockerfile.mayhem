@@ -5,11 +5,5 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y make gcc
 
 COPY . /lacc
 WORKDIR /lacc
-RUN ./configure --prefix=/install
+RUN ./configure
 RUN make
-RUN make install
-
-FROM ubuntu:20.04 as package
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gcc
-COPY --from=builder /install /install

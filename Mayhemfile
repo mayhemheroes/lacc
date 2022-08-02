@@ -2,4 +2,4 @@ project: lacc
 target: lacc
 
 cmds:
-  - cmd: /install/bin/lacc @@
+  - cmd: /lacc/bin/lacc @@
