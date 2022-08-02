@@ -2,5 +2,4 @@ project: lacc
 target: lacc
 
 cmds:
-  - cmd: /lacc/bin/lacc /test.c
-    filepath: /test.c
+  - cmd: /install/bin/lacc @@
