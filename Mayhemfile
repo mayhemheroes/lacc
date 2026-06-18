@@ -1,0 +1,6 @@
+project: lacc
+target: lacc
+
+cmds:
+  - cmd: /install/bin/lacc @@
+    filepath: /test.c
