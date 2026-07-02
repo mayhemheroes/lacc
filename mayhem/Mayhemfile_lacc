@@ -1,0 +1,21 @@
+project: lacc
+target: lacc
+
+# File-input (CLI) target: feed the fuzz bytes as a C source file to lacc — the small self-hosting
+# C compiler that PARSES C and emits assembly. The whole front end (preprocessor, scanner, parser,
+# decl/expr/stmt/type analysis) and the x86_64 backend run on the input. Not libFuzzer: the natural
+# fuzz surface is the compiler on a source file. @@ is the input-file placeholder.
+#
+# -S stops after code generation (emit assembly) WITHOUT invoking an external assembler/linker, and
+# -o /dev/null discards the asm — so the target exercises lacc's own parse+codegen, not gas/ld.
+# Ported from the old integration's file-input target (old: /lacc/bin/lacc on a fixed /test.c path).
+#
+# -x c FORCES the input language to C. lacc (a C-compiler driver) otherwise infers the language from
+# the file's EXTENSION (only `.c`/`.i` => C; see add_input_file() in src/lacc.c). Mayhem's @@ input
+# file has NO extension, so without -x c lacc leaves it LANG_UNKNOWN and aborts with
+# "Unrecognized input file" (exit 1) on EVERY input — including valid C and the default seed — so
+# Mayhem could never obtain a passing test case. lacc has no usable stdin ('-') input mode, so -x c
+# is the fix. With -x c a valid C program compiles to exit 0 (passing test) and the bytes are parsed.
+cmds:
+    # abort explicit so any sanitizer finding terminates the process (SIGABRT) and is recorded as a crash.
+  - cmd: /mayhem/lacc -x c -S @@ -o /dev/null
